@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="readme.md" />
+  </Folder>
+  <Project Path="ScoreCrafter.Api/ScoreCrafter.Api.csproj" Id="31a161b0-b9cc-4b78-b51b-30c791d62838" />
+  <Project Path="ScoreCrafter.Application/ScoreCrafter.Application.csproj" Id="9b2e0526-f636-461e-92ab-562e2c79fb9b" />
+  <Project Path="ScoreCrafter.Domain/ScoreCrafter.Domain.csproj" Id="ae130eb2-bd1e-4f0c-8bd7-f5d1b6e5f3ce" />
+  <Project Path="ScoreCrafter.Infra.Sqllite/ScoreCrafter.Infra.Sqllite.csproj" Id="0b980f1f-6629-45ca-b306-de16ca9bd752" />
+  <Project Path="ScoreCrafter.Model/ScoreCrafter.SDK.Model.csproj" Id="a58780d2-eb33-433a-8ea7-b67c2889ede9" />
+  <Project Path="ScoreCrafter.Test/ScoreCrafter.Test.csproj" Id="d0372732-a6eb-4d68-acb1-142586b7de9c" />
+</Solution>
