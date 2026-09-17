@@ -32,8 +32,7 @@ public sealed class FormulaService : IFormulaService
     {
         var result = await _create.Handle(
             new CreateFormulaCommand(
-                request.GradeId,
-                request.Recipe,
+                request.Definition,
                 request.Version),
             context.CancellationToken);
 
@@ -47,7 +46,7 @@ public sealed class FormulaService : IFormulaService
         var result = await _update.Handle(
             new UpdateFormulaCommand(
                 request.FormulaId,
-                request.Recipe),
+                request.Definition),
             context.CancellationToken);
 
         return ToResponse(result);
@@ -89,7 +88,6 @@ public sealed class FormulaService : IFormulaService
         => new()
         {
             FormulaId = result.FormulaId,
-            GradeId = result.GradeId,
             Definition = result.Definition,
             Version = result.Version
         };

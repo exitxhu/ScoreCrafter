@@ -1,48 +1,156 @@
-score crafter
+# score crafter
 
 a simple solution for grading and scoring customers based on dynamic rules
 
-Solution contents:
+## Solution contents:
 
-1- ScoreCrafter.Domain:
+1- **ScoreCrafter.Domain**:
 
-HighLevel Abstraction, Entities, Dtos, Exception, Invariants, Enums, ValueObjects
+High-level abstractions, entities, DTOs, exceptions, invariants, enums, value objects
 
-2- ScoreCrafter.Application:
+2- **ScoreCrafter.Application**:
 
-Domain implementation 
+Domain use cases, commands, queries and business logic
 
-3- ScoreCrafter.Infrastructure
+3- **ScoreCrafter.Infrastructure**:
 
-LowLevel dependencies implementations like db, cache etc.
+Low-level implementations such as database and transactions
 
-4- ScoreCrafter.Api:
+4- **ScoreCrafter.Api**:
 
-Edge of domain, Rest, gRpc etc
+REST, gRPC and transport adapters
 
-5- ScoreCrafter.Tests
+5- **ScoreCrafter.Tests**:
 
-Integrations and Unit tests
+Unit and integration tests
 
-6- ScoreCrafter.Externals
+6- **ScoreCrafter.Externals**:
 
-Mocking expected co-services
+Mocks for expected external services
+
+## Architecture Design Notes:
+
+* **Data modeling:**
+
+ScoreCrafter assumes it lives inside a microservice environment. It does not own user/purchase master data and does not generate their IDs.
+
+* **Purchase flow:**
+
+A purchase is treated as a fulfillment event and triggers one score recalculation.
+
+```mermaid
+sequenceDiagram
+    Client->>API: Register Purchase
+    API->>Application: RegisterPurchase
+    Application->>DB: Create User if needed
+    Application->>DB: Persist Purchase
+    Application->>Queue: Enqueue Score Calculation
+    Queue-->>Worker: Consume
+    Worker->>Application: Calculate User Score
+    Application->>DB: Load monthly purchases + current grade
+    Application->>Formula Engine: Evaluate formula
+    Formula Engine-->>Application: Final Score
+    Application->>DB: Persist User Score
+```
+
+* **Calculating score:**
+
+Score calculation is asynchronous and runs through an in-memory queue/worker.
+
+* **Dynamic Formula:**
+
+Score rules are stored as versioned dynamic formulas instead of hardcoded business logic, allowing rule changes without code changes.
+
+* **Grade:**
+
+User grade is managed separately from score calculation. Customer type is represented by a fixed numeric value used by the formula.
+
+* **Transactions:**
+
+Database operations use transaction ownership semantics to support nested transaction scopes.
+
+## How to test:
+
+REST: `http://localhost:7000`
+
+gRPC: `https://localhost:7001`
+
+Postman gRPC uses server reflection to discover the available services and methods.
+
+gRPC contracts are Code-First using `protobuf-net.Grpc`; no `.proto` files are required by the API.
+
+## Todo Improvement:
+
+* Cache formula parsing/evaluation; parsed formulas can be kept in first-level cache.
+* Hot entities can use second-level/distributed cache with short expiration.
+* Persisting grade needs a distributed lock to prevent race conditions.
+* Current formula references grades by `GradeId`; a stable business-level reference should be used instead.
+* The current in-memory queue is not durable; production implementation should use a persistent queue/outbox.
+* Score calculation can be retried/dead-lettered in a production queue.
+* User/purchase data ownership remains external by design.
 
 
-Architechtur Design Notes:
 
-* Dynamic Formula:
-	In a real system we can not risk hardcoding such important piece of action, cuz of regular updateds.
-	regular down time and bulking code eventually bring us to a big ball of mud, so i decided to use my experience in a dynamic marketing system and bring a dynamic formula to the system.
-	as this Customer club domain extends, the value of this approach will be more clear.
+## Appendix: Postman Setup & Testing
 
+### REST
 
-# Todo Improvement
-* Cache can improve greatly, specially formula engin is a heavy element that can be parsed to be in first layer cache
-* Hot entities should be in second layer cache fot some times
-* Need distributed lock mechanism for persisting Grade, because fecthing Id is prone to race condition
-* Currently i use grade Id as placeholder in my formula, it should be a more subtle reference, because grades are not hard guaranteed to be fixed, logically it should but technically it can change.
+Run the API with:
 
+```bash
+dotnet run --project ScoreCrafter.Api
+```
 
+REST endpoint:
 
+```text
+http://localhost:7000
+```
 
+Import the exported REST collection into Postman and send the requests against the local API.
+
+### gRPC
+
+gRPC endpoint:
+
+```text
+https://localhost:7001
+```
+
+The API exposes Code-First gRPC contracts through server reflection.
+
+In Postman:
+
+1. Create a new **gRPC Request**
+2. Enter:
+
+```text
+https://localhost:7001
+```
+
+3. Use **Reflection** to load the available services
+4. Select the required service and method
+5. Edit the generated request body and send
+
+For local HTTPS certificate issues:
+
+```bash
+dotnet dev-certs https --trust
+```
+
+### Suggested Test Flow
+
+1. Create a **Grade**
+2. Create a **Formula** for the grade
+3. Assign the grade to a user
+4. Register a **Purchase**
+5. Wait for the asynchronous score calculation
+6. Get the user summary and verify the calculated score
+7. Use **Test Formula** to validate formula changes independently
+
+### Notes
+
+* REST requests can be exported/imported as a Postman Collection.
+* gRPC requests use Postman's reflection support and do not require `.proto` files.
+* The gRPC contracts use Code-First `protobuf-net.Grpc`.
+* `Guid`, `decimal` and `DateTime` are serialized by `protobuf-net`; Postman may display their generated wire representation instead of conventional JSON values.

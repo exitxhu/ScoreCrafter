@@ -34,7 +34,6 @@ public sealed class FormulasController : ControllerBase
     {
         var result = await _create.Handle(
             new CreateFormulaCommand(
-                request.GradeId,
                 request.Definition,
                 request.Version),
             cancellationToken);
@@ -51,7 +50,7 @@ public sealed class FormulasController : ControllerBase
         var result = await _update.Handle(
             new UpdateFormulaCommand(
                 formulaId,
-                request.Recipe),
+                request.Definition),
             cancellationToken);
 
         return Ok(ToResponse(result));
@@ -96,7 +95,6 @@ public sealed class FormulasController : ControllerBase
         FormulaDto result)
         => new(
             result.FormulaId,
-            result.GradeId,
             result.Definition,
             result.Version);
 }

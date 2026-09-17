@@ -36,23 +36,10 @@ public sealed class CalculateUserScoreCommandHandler
             throw new InvalidOperationException(
                 $"User '{command.UserId}' does not exist.");
 
-        var purchaseExists = await _context.Purchases
-            .AnyAsync(
-                x =>
-                    x.Id == command.PurchaseId &&
-                    x.UserId == command.UserId,
-                cancellationToken);
-
-        if (!purchaseExists)
-            throw new InvalidOperationException(
-                $"Purchase '{command.PurchaseId}' does not exist.");
 
         var purchaseAmount = await _context.Purchases
-            .Where(x =>
-                x.UserId == command.UserId &&
-                x.Id == command.PurchaseId)
-            .Select(x => x.Amount)
-            .SingleAsync(cancellationToken);
+            .Where(x => x.UserId == command.UserId)
+            .SumAsync(x => x.Amount, cancellationToken);
 
         var purchaseCount = await _context.Purchases
             .CountAsync(
@@ -66,7 +53,7 @@ public sealed class CalculateUserScoreCommandHandler
             .Select(x => new
             {
                 x.Grade.Id,
-                
+
             })
             .SingleOrDefaultAsync(cancellationToken);
 
@@ -74,7 +61,6 @@ public sealed class CalculateUserScoreCommandHandler
             return;
 
         var formula = await _context.Formulas
-            .Where(x => x.GradeId == currentGrade.Id)
             .OrderByDescending(x => x.Version)
             .FirstOrDefaultAsync(cancellationToken);
 

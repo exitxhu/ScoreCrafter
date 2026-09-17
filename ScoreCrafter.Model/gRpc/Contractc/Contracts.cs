@@ -25,6 +25,10 @@ public interface IUserService
     Task<UserSummaryGrpcResponse> GetUser(
         UserSummaryGrpcRequest request,
         CallContext context = default);
+    [OperationContract]
+    Task<UserGradeGrpcResponse> SetUserGrade(
+    SetUserGradeGrpcRequest request,
+    CallContext context = default);
 }
 [ServiceContract]
 public interface IFormulaService

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScoreCrafter.Infra.Sqllite.Persistenc;
 
@@ -10,9 +11,11 @@ using ScoreCrafter.Infra.Sqllite.Persistenc;
 namespace ScoreCrafter.Infra.Sqllite.Migrations
 {
     [DbContext(typeof(ScoreCrafterDbContext))]
-    partial class ScoreCrafterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260917160434_fix_naming_Definition")]
+    partial class fix_naming_Definition
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.12");
@@ -107,7 +110,18 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("CurrentUserGradeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("CurrentUserGradeId1")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UserScore")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CurrentUserGradeId1");
 
                     b.HasIndex("Id")
                         .IsUnique();
@@ -132,11 +146,16 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GradeId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.HasIndex("UserId", "IsCurrent");
 
@@ -192,6 +211,15 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ScoreCrafter.Domain.Entities.User", b =>
+                {
+                    b.HasOne("ScoreCrafter.Domain.Entities.UserGrade", "CurrentUserGrade")
+                        .WithMany()
+                        .HasForeignKey("CurrentUserGradeId1");
+
+                    b.Navigation("CurrentUserGrade");
+                });
+
             modelBuilder.Entity("ScoreCrafter.Domain.Entities.UserGrade", b =>
                 {
                     b.HasOne("ScoreCrafter.Domain.Entities.Grade", "Grade")
@@ -205,6 +233,10 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("ScoreCrafter.Domain.Entities.User", null)
+                        .WithMany("UserGradeHistory")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Grade");
 
@@ -228,6 +260,11 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                     b.Navigation("Formula");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ScoreCrafter.Domain.Entities.User", b =>
+                {
+                    b.Navigation("UserGradeHistory");
                 });
 #pragma warning restore 612, 618
         }

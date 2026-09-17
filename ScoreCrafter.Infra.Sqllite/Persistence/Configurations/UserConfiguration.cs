@@ -22,7 +22,5 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(x => x.Id)
             .IsUnique();
 
-        builder.HasMany(a => a.UserGradeHistory).WithOne(a => a.User);
-        builder.HasOne(a => a.CurrentUserGrade);
     }
 }

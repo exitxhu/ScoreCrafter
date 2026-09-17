@@ -17,19 +17,11 @@ public sealed class FormulaConfiguration: IEntityTypeConfiguration<Formula>
             .ValueGeneratedNever();
 
         builder.Property(x => x.Definition)
-            .HasColumnName("Recipe")
             .HasMaxLength(10000)
             .IsRequired();
 
         builder.Property(x => x.Version)
             .IsRequired();
 
-        builder.HasOne(x => x.Grade)
-            .WithMany()
-            .HasForeignKey("GradeId")
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasIndex("GradeId", nameof(Formula.Version))
-            .IsUnique();
     }
 }

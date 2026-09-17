@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScoreCrafter.Infra.Sqllite.Persistenc;
 
@@ -10,9 +11,11 @@ using ScoreCrafter.Infra.Sqllite.Persistenc;
 namespace ScoreCrafter.Infra.Sqllite.Migrations
 {
     [DbContext(typeof(ScoreCrafterDbContext))]
-    partial class ScoreCrafterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260917161104_user_grade_rel_fix_2")]
+    partial class user_grade_rel_fix_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.12");
@@ -105,6 +108,9 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UserScore")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -201,7 +207,7 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                         .IsRequired();
 
                     b.HasOne("ScoreCrafter.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("UserGradeHistory")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -228,6 +234,11 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                     b.Navigation("Formula");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ScoreCrafter.Domain.Entities.User", b =>
+                {
+                    b.Navigation("UserGradeHistory");
                 });
 #pragma warning restore 612, 618
         }

@@ -16,16 +16,13 @@ public sealed record UserSummaryResponse(
     string? Grade,
     int PurchaseCount);
 public sealed record CreateFormulaRequest(
-    int GradeId,
     string Definition,
     int Version);
 
-public sealed record UpdateFormulaRequest(
-    string Recipe);
+public sealed record UpdateFormulaRequest(string Definition);
 
 public sealed record FormulaResponse(
     Guid FormulaId,
-    int GradeId,
     string Definition,
     int Version);
 
@@ -64,4 +61,5 @@ public sealed record TestGradeResponse(
     bool Result,
     string? Error);
 
-
+public sealed record SetUserGradeRequest(
+    int GradeId);

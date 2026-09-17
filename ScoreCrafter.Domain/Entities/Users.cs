@@ -6,10 +6,6 @@ namespace ScoreCrafter.Domain.Entities;
 
 public class User : BaseEntity
 {
-    public List<UserGrade> UserGradeHistory { get; set; }
-    public Guid? CurrentUserGradeId { get; set; }
-    public UserGrade? CurrentUserGrade { get; set; }
-    public decimal UserScore { get; set; }
 }
 public class UserGrade : BaseEntity
 {
@@ -47,8 +43,6 @@ public class Grade : BaseEntity<int>
 public class Formula : BaseEntity
 {
     public int Version { get; set; }
-    public Grade Grade { get; set; }
-    public int GradeId { get; set; }
     public string Definition { get; set; }
     public bool IsActive { get; set; }
 }

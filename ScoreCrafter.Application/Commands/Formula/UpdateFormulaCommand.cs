@@ -36,7 +36,6 @@ public sealed class UpdateFormulaCommandHandler
         FormulaCompiler.Build(command.Definition);
 
         var nextVersion = await _context.Formulas
-            .Where(x => x.GradeId == current.GradeId)
             .MaxAsync(
                 x => (int?)x.Version,
                 cancellationToken) ?? 0;
@@ -44,7 +43,6 @@ public sealed class UpdateFormulaCommandHandler
         var formula = new Domain.Entities.Formula
         {
             Id = Guid.CreateVersion7(),
-            GradeId = current.GradeId,
             Definition = command.Definition,
             Version = nextVersion + 1
         };

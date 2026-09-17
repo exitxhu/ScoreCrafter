@@ -5,7 +5,7 @@ using ScoreCrafter.Domain.Entities;
 
 namespace ScoreCrafter.Infra.Sqllite.Persistenc.Configurations;
 
-public sealed class UserGradeConfiguration: IEntityTypeConfiguration<UserGrade>
+public sealed class UserGradeConfiguration : IEntityTypeConfiguration<UserGrade>
 {
     public void Configure(EntityTypeBuilder<UserGrade> builder)
     {
@@ -24,7 +24,7 @@ public sealed class UserGradeConfiguration: IEntityTypeConfiguration<UserGrade>
 
         builder.HasOne(x => x.User)
             .WithMany()
-            .HasForeignKey("UserId")
+            .HasForeignKey(a => a.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Grade)

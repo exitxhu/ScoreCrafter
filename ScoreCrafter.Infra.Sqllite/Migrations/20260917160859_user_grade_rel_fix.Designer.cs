@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScoreCrafter.Infra.Sqllite.Persistenc;
 
@@ -10,9 +11,11 @@ using ScoreCrafter.Infra.Sqllite.Persistenc;
 namespace ScoreCrafter.Infra.Sqllite.Migrations
 {
     [DbContext(typeof(ScoreCrafterDbContext))]
-    partial class ScoreCrafterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260917160859_user_grade_rel_fix")]
+    partial class user_grade_rel_fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.12");
@@ -107,6 +110,9 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("UserScore")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Id")
@@ -132,11 +138,16 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GradeId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.HasIndex("UserId", "IsCurrent");
 
@@ -206,6 +217,10 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ScoreCrafter.Domain.Entities.User", null)
+                        .WithMany("UserGradeHistory")
+                        .HasForeignKey("UserId1");
+
                     b.Navigation("Grade");
 
                     b.Navigation("User");
@@ -228,6 +243,11 @@ namespace ScoreCrafter.Infra.Sqllite.Migrations
                     b.Navigation("Formula");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ScoreCrafter.Domain.Entities.User", b =>
+                {
+                    b.Navigation("UserGradeHistory");
                 });
 #pragma warning restore 612, 618
         }

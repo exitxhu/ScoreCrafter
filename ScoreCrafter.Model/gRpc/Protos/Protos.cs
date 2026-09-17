@@ -61,10 +61,7 @@ public sealed class UserSummaryGrpcResponse
 public sealed class CreateFormulaGrpcRequest
 {
     [ProtoMember(1)]
-    public int GradeId { get; set; }
-
-    [ProtoMember(2)]
-    public string Recipe { get; set; } = string.Empty;
+    public string Definition { get; set; } = string.Empty;
 
     [ProtoMember(3)]
     public int Version { get; set; }
@@ -77,9 +74,6 @@ public sealed class FormulaGrpcResponse
     public Guid FormulaId { get; set; }
 
     [ProtoMember(2)]
-    public int GradeId { get; set; }
-
-    [ProtoMember(3)]
     public string Definition { get; set; } = string.Empty;
 
     [ProtoMember(4)]
@@ -93,7 +87,7 @@ public sealed class UpdateFormulaGrpcRequest
     public Guid FormulaId { get; set; }
 
     [ProtoMember(2)]
-    public string Recipe { get; set; } = string.Empty;
+    public string Definition { get; set; } = string.Empty;
 }
 
 [ProtoContract]
@@ -165,18 +159,6 @@ public sealed class UpdateGradeGrpcRequest
 
 }
 
-[ProtoContract]
-public sealed class TestGradeGrpcRequest
-{
-    [ProtoMember(1)]
-    public Guid GradeId { get; set; }
-
-    [ProtoMember(2)]
-    public decimal PurchaseAmount { get; set; }
-
-    [ProtoMember(3)]
-    public int PurchaseCount { get; set; }
-}
 
 [ProtoContract]
 public sealed class TestGradeGrpcResponse
@@ -189,4 +171,30 @@ public sealed class TestGradeGrpcResponse
 
     [ProtoMember(3)]
     public string? Error { get; set; }
+}
+
+[ProtoContract]
+public sealed class SetUserGradeGrpcRequest
+{
+    [ProtoMember(1)]
+    public Guid UserId { get; set; }
+
+    [ProtoMember(2)]
+    public int GradeId { get; set; }
+}
+
+[ProtoContract]
+public sealed class UserGradeGrpcResponse
+{
+    [ProtoMember(1)]
+    public Guid UserId { get; set; }
+
+    [ProtoMember(2)]
+    public int GradeId { get; set; }
+
+    [ProtoMember(3)]
+    public string GradeName { get; set; } = string.Empty;
+
+    [ProtoMember(4)]
+    public bool IsCurrent { get; set; }
 }
