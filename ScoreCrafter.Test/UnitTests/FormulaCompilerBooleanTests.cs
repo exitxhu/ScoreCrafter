@@ -14,7 +14,8 @@ public class FormulaCompilerBooleanTests
         var result = formula.Evaluate(
             new FormulaContext(
                 PurchaseAmount: 15_000_000,
-                PurchaseCount: 1));
+                PurchaseCount: 1,
+                default));
 
         Assert.True(result.AsBoolean());
     }
@@ -28,7 +29,8 @@ public class FormulaCompilerBooleanTests
         var result = formula.Evaluate(
             new FormulaContext(
                 PurchaseAmount: 15_000_000,
-                PurchaseCount: 7));
+                PurchaseCount: 7,
+                default));
 
         Assert.True(result.AsBoolean());
     }
@@ -42,7 +44,8 @@ public class FormulaCompilerBooleanTests
         var result = formula.Evaluate(
             new FormulaContext(
                 PurchaseAmount: 5_000_000,
-                PurchaseCount: 7));
+                PurchaseCount: 7,
+                default));
 
         Assert.True(result.AsBoolean());
     }
@@ -57,7 +60,8 @@ public class FormulaCompilerBooleanTests
         var result = formula.Evaluate(
             new FormulaContext(
                 PurchaseAmount: 5_000_000,
-                PurchaseCount: 2));
+                PurchaseCount: 2,
+                default));
 
         Assert.False(result.AsBoolean());
     }
@@ -70,7 +74,8 @@ public class FormulaCompilerBooleanTests
         var result = formula.Evaluate(
             new FormulaContext(
                 PurchaseAmount: 50_000_000,
-                PurchaseCount: 4));
+                PurchaseCount: 4,
+                default));
 
         Assert.False(result.AsBoolean());
     }

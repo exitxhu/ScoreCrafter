@@ -2,6 +2,7 @@
   <Folder Name="/Solution Items/">
     <File Path="readme.md" />
   </Folder>
+  <Project Path="ScorCrafter.Infra.InMemoryQueue/ScoreCrafter.Infra.InMemoryQueue.csproj" Id="cb3af8f8-af02-4945-b176-b2abad6b4e96" />
   <Project Path="ScoreCrafter.Api/ScoreCrafter.Api.csproj" Id="31a161b0-b9cc-4b78-b51b-30c791d62838" />
   <Project Path="ScoreCrafter.Application/ScoreCrafter.Application.csproj" Id="9b2e0526-f636-461e-92ab-562e2c79fb9b" />
   <Project Path="ScoreCrafter.Domain/ScoreCrafter.Domain.csproj" Id="ae130eb2-bd1e-4f0c-8bd7-f5d1b6e5f3ce" />

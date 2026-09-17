@@ -2,7 +2,8 @@
 
 public sealed record FormulaContext(
     decimal PurchaseAmount,
-    int PurchaseCount)
+    int PurchaseCount,
+    int CustomerType)
 {
     public decimal GetValue(string name)
     {
@@ -10,6 +11,7 @@ public sealed record FormulaContext(
         {
             "PURCHASEAMOUNT" => PurchaseAmount,
             "PURCHASECOUNT" => PurchaseCount,
+            "CUSTOMERTYPE" => CustomerType,
             _ => throw new FormulaEvaluationException(
                 $"Unknown variable '{name}'.")
         };

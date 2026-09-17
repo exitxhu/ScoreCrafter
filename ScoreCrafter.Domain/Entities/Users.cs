@@ -6,15 +6,17 @@ namespace ScoreCrafter.Domain.Entities;
 
 public class User : BaseEntity
 {
-    public Grade UserGrade { get; set; }
+    public Grade? UserGrade { get; set; }
+    public Guid? UserGradeId { get; set; }
     public decimal UserScore { get; set; }
 }
 public class UserGrade : BaseEntity
 {
-    public User User { get; set; }
     public Guid UserId { get; set; }
+    public int GradeId { get; set; }
     public bool IsCurrent { get; set; }
     public Grade Grade { get; set; }
+    public User User { get; set; }
 }
 public class UserScore : BaseEntity
 {
@@ -37,17 +39,16 @@ public class Purchase : BaseEntity
     public Dictionary<string, string> Metadata { get; set; }
 
 }
-public class Grade : BaseEntity
+public class Grade : BaseEntity<int>
 {
     public string Name { get; set; }
     public string Description { get; set; }
-    public string Criteria { get; set; }
 }
 public class Formula : BaseEntity
 {
     public int Version { get; set; }
     public Grade Grade { get; set; }
-    public Guid GradeId { get; set; }
+    public int GradeId { get; set; }
     public string Definition { get; set; }
     public bool IsActive { get; set; }
 }

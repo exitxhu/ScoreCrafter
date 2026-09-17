@@ -14,7 +14,7 @@ namespace ScoreCrafter.Infra.Sqllite;
 
 public static class Extensions
 {
-    public static IServiceCollection AddInfrastructure(
+    public static IServiceCollection AddSqlliteInfrastructure(
         this IServiceCollection services,
         string connectionString)
     {

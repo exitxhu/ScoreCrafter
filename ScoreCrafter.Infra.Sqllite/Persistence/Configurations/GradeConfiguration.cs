@@ -23,8 +23,6 @@ public sealed class GradeConfiguration: IEntityTypeConfiguration<Grade>
         builder.Property(x => x.Description)
             .HasMaxLength(1000);
 
-        builder.Property(x => x.Criteria)
-            .HasMaxLength(4000);
 
         builder.Property(x => x.CreatedTime)
             .IsRequired();

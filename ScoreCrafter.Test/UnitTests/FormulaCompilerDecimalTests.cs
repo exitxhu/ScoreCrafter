@@ -16,7 +16,8 @@ public class FormulaCompilerDecimalTests
         var result = formula.Evaluate(
             new FormulaContext(
                 PurchaseAmount: 6_000,
-                PurchaseCount: 1));
+                PurchaseCount: 1,
+                default));
 
         Assert.Equal(FormulaEvaluationResult.FormulaResultType.Decimal, result.ResultType);
         Assert.Equal(300m, result.AsDecimal());
@@ -32,7 +33,8 @@ public class FormulaCompilerDecimalTests
         var result = formula.Evaluate(
             new FormulaContext(
                 PurchaseAmount: 60_000,
-                PurchaseCount: 5));
+                PurchaseCount: 5,
+                default));
 
         Assert.Equal(FormulaEvaluationResult.FormulaResultType.Decimal, result.ResultType);
         Assert.Equal(1_100m, result.AsDecimal());
@@ -49,7 +51,8 @@ public class FormulaCompilerDecimalTests
         var result = formula.Evaluate(
             new FormulaContext(
                 PurchaseAmount: 35_000_000,
-                PurchaseCount: 1));
+                PurchaseCount: 1,
+                default));
 
         // 35M / 60 = 583,333.333...
         // Bonus = 5% + (2 * 2.5%) = 10%
@@ -70,7 +73,8 @@ public class FormulaCompilerDecimalTests
             () => formula.Evaluate(
                 new FormulaContext(
                     PurchaseAmount: 1000,
-                    PurchaseCount: 1)));
+                    PurchaseCount: 1,
+                default)));
 
         Assert.Contains("Division by zero", exception.Message);
     }
@@ -83,8 +87,51 @@ public class FormulaCompilerDecimalTests
         var result = formula.Evaluate(
             new FormulaContext(
                 PurchaseAmount: 100,
-                PurchaseCount: 1));
+                PurchaseCount: 1,
+                default));
         Assert.Equal(FormulaEvaluationResult.FormulaResultType.Decimal, result.ResultType);
         Assert.Equal(120m, result.AsDecimal());
+    }
+    [Fact]
+    public void Complex_Formula()
+    {
+        var formula = FormulaCompiler.Build(
+            @"(
+    PurchaseAmount /
+    IF(
+        CustomerType == 1,
+        100,
+        IF(
+            CustomerType == 2,
+            80,
+            60
+        )
+    )
+)
+*
+(
+    1
+    + IF(
+        PurchaseCount >= 5,
+        0.10,
+        0
+      )
+    + IF(
+        PurchaseAmount > 10000000,
+        0.05
+        + FLOOR(
+            (PurchaseAmount - 10000000) / 10000000
+          ) * 0.025,
+        0
+      )
+)");
+
+        var result = formula.Evaluate(
+            new FormulaContext(
+                PurchaseAmount: 60_000_000,
+                PurchaseCount: 5,
+                CustomerType: 3));
+        Assert.Equal(FormulaEvaluationResult.FormulaResultType.Decimal, result.ResultType);
+        Assert.Equal(1_275_000m, result.AsDecimal());
     }
 }

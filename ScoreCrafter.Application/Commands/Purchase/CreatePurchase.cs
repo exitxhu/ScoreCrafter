@@ -3,11 +3,13 @@
 using Microsoft.EntityFrameworkCore;
 
 using ScoreCrafter.Application.Abstraction.Data;
+using ScoreCrafter.Application.Abstraction.Queue;
 using ScoreCrafter.Application.Commands.User;
 using ScoreCrafter.Application.Facilatores;
 using ScoreCrafter.Domain.Entities;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -24,15 +26,18 @@ public sealed class RegisterPurchaseCommandHandler
     private readonly IScoreCrafterDbContext _context;
     private readonly CreateUserCommandHandler _createUserHandler;
     private readonly ITransactionManager _transactionManager;
+    private readonly IScoreCalculationQueue _queue;
 
     public RegisterPurchaseCommandHandler(
         IScoreCrafterDbContext context,
         CreateUserCommandHandler createUserHandler,
-        ITransactionManager transactionManager)
+        ITransactionManager transactionManager,
+        IScoreCalculationQueue queue)
     {
         _context = context;
         _createUserHandler = createUserHandler;
         _transactionManager = transactionManager;
+        _queue = queue;
     }
 
     public async Task Handle(
@@ -51,14 +56,9 @@ public sealed class RegisterPurchaseCommandHandler
 
             if (user is null)
             {
-                user = new User
-                {
-                    Id = command.UserId
-                };
+                var userCommand = new CreateUserCommand(command.UserId);
 
-                await _context.Users.AddAsync(
-                    user,
-                    cancellationToken);
+                await _createUserHandler.Handle(userCommand, cancellationToken);
             }
 
             var purchase = new Purchase
@@ -77,6 +77,11 @@ public sealed class RegisterPurchaseCommandHandler
             await _context.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
+
+            await _queue.EnqueueAsync(
+            new ScoreCalculationItem(command.UserId,
+                command.PurchaseId),
+                cancellationToken);
         }
         catch
         {
