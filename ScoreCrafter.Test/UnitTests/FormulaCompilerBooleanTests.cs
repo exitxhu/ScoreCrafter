@@ -66,7 +66,7 @@ public class FormulaCompilerBooleanTests
         Assert.False(result.AsBoolean());
     }
     [Fact]
-    public void Should_Return_False_When_Grade_Criteria_Is_Not_Met()
+    public void Should_Return_False_When_Criteria_Is_Not_Met()
     {
         var formula = FormulaCompiler.Build(
             "PurchaseAmount >= 50000000 AND PurchaseCount >= 5");

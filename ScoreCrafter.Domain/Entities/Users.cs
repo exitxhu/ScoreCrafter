@@ -6,8 +6,9 @@ namespace ScoreCrafter.Domain.Entities;
 
 public class User : BaseEntity
 {
-    public Grade? UserGrade { get; set; }
-    public Guid? UserGradeId { get; set; }
+    public List<UserGrade> UserGradeHistory { get; set; }
+    public Guid? CurrentUserGradeId { get; set; }
+    public UserGrade? CurrentUserGrade { get; set; }
     public decimal UserScore { get; set; }
 }
 public class UserGrade : BaseEntity
@@ -35,7 +36,6 @@ public class Purchase : BaseEntity
     public Guid UserId { get; set; }
     public decimal Amount { get; set; }
     public DateTime PurchaseDate { get; set; }
-    public string ExternalId { get; set; }
     public Dictionary<string, string> Metadata { get; set; }
 
 }
@@ -62,5 +62,5 @@ public abstract class BaseEntity : BaseEntity<Guid>
 public abstract class BaseEntity<T>
 {
     public T Id { get; set; }
-    public DateTime CreatedTime { get; set; }
+    public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
 }

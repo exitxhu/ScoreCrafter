@@ -7,8 +7,6 @@ public sealed class GradeDto
     public int GradeId { get; init; }
     public string Name { get; init; } = string.Empty;
     public string Description { get; init; } = string.Empty;
-    public string Criteria { get; init; } = string.Empty;
-
     public static GradeDto From(Grade grade)
         => new()
         {

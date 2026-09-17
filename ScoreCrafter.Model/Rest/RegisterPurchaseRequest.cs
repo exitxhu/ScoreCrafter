@@ -44,18 +44,15 @@ public sealed record TestFormulaResponse(
 
 public sealed record CreateGradeRequest(
     string Name,
-    string Description,
-    string Criteria);
+    string Description);
 
 public sealed record UpdateGradeRequest(
-    string Description,
-    string Criteria);
+    string Description);
 
 public sealed record GradeResponse(
     int GradeId,
     string Name,
-    string Description,
-    string Criteria);
+    string Description);
 
 public sealed record TestGradeRequest(
     int GradeId,

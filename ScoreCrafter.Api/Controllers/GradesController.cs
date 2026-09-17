@@ -47,8 +47,7 @@ public sealed class GradesController : ControllerBase
         var result = await _update.Handle(
             new UpdateGradeCommand(
                 gradeId,
-                request.Description,
-                request.Criteria),
+                request.Description),
             cancellationToken);
 
         return Ok(ToResponse(result));
@@ -72,6 +71,5 @@ public sealed class GradesController : ControllerBase
         => new(
             result.GradeId,
             result.Name,
-            result.Description,
-            result.Criteria);
+            result.Description);
 }

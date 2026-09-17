@@ -138,8 +138,6 @@ public sealed class CreateGradeGrpcRequest
     [ProtoMember(2)]
     public string Description { get; set; } = string.Empty;
 
-    [ProtoMember(3)]
-    public string Criteria { get; set; } = string.Empty;
 }
 
 [ProtoContract]
@@ -154,8 +152,6 @@ public sealed class GradeGrpcResponse
     [ProtoMember(3)]
     public string Description { get; set; } = string.Empty;
 
-    [ProtoMember(4)]
-    public string Criteria { get; set; } = string.Empty;
 }
 
 [ProtoContract]
@@ -167,8 +163,6 @@ public sealed class UpdateGradeGrpcRequest
     [ProtoMember(2)]
     public string Description { get; set; } = string.Empty;
 
-    [ProtoMember(3)]
-    public string Criteria { get; set; } = string.Empty;
 }
 
 [ProtoContract]

@@ -43,8 +43,7 @@ public sealed class GradeService : IGradeService
         var result = await _update.Handle(
             new UpdateGradeCommand(
                 request.GradeId,
-                request.Description,
-                request.Criteria),
+                request.Description),
             context.CancellationToken);
 
         return ToResponse(result);
@@ -65,7 +64,6 @@ public sealed class GradeService : IGradeService
         {
             GradeId = result.GradeId,
             Name = result.Name,
-            Description = result.Description,
-            Criteria = result.Criteria
+            Description = result.Description
         };
 }

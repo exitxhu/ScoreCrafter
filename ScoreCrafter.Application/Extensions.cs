@@ -23,6 +23,7 @@ public static class Extensions
         services.AddScoped<GetUserSummaryQueryHandler>();
         services.AddScoped<CreateUserCommandHandler>();
         services.AddScoped<SetUserGradeCommandHandler>();
+        services.AddScoped<CalculateUserScoreCommandHandler>();
 
         services.AddScoped<CreateFormulaCommandHandler>();
         services.AddScoped<UpdateFormulaCommandHandler>();

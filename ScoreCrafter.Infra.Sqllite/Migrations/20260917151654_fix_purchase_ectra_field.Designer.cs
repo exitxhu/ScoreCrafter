@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScoreCrafter.Infra.Sqllite.Persistenc;
 
@@ -10,9 +11,11 @@ using ScoreCrafter.Infra.Sqllite.Persistenc;
 namespace ScoreCrafter.Infra.Sqllite.Migrations
 {
     [DbContext(typeof(ScoreCrafterDbContext))]
-    partial class ScoreCrafterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260917151654_fix_purchase_ectra_field")]
+    partial class fix_purchase_ectra_field
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.12");

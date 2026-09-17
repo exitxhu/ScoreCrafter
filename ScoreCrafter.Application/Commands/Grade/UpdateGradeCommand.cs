@@ -7,8 +7,7 @@ namespace ScoreCrafter.Application.Commands.Grade;
 
 public sealed record UpdateGradeCommand(
     int GradeId,
-    string Description,
-    string Criteria);
+    string Description);
 
 
 
@@ -33,8 +32,6 @@ public sealed class UpdateGradeCommandHandler
 
         if (grade is null)
             throw new KeyNotFoundException("Grade not found.");
-
-        FormulaCompiler.Build(command.Criteria);
 
         grade.Description = command.Description;
 
