@@ -1,6 +1,8 @@
-# score crafter
+# Score Crafter
 
 a simple solution for grading and scoring customers based on dynamic rules
+
+```For more Information See the video in the root folder of this repository.```
 
 ## Solution contents:
 
